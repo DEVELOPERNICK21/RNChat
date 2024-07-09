@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TextInput, Button } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TextInput, Button, Pressable } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import { colors } from '../../../res/color';
+import { BlackArrowBack_Icon } from '../../../res/icons';
+import { height, width } from '../../../res/string';
+import { useNavigation } from '@react-navigation/native';
+import fonts from '../../../res/fonts';
 
 const ChatRoomScreen = ({ route }) => {
   const { roomId } = route.params;
@@ -10,6 +15,7 @@ const ChatRoomScreen = ({ route }) => {
   const [userMap, setUserMap] = useState({});
   const [roomDetails, setRoomDetails] = useState({});
   const currentUser = auth().currentUser;
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchMessages = firestore()
@@ -79,6 +85,10 @@ const ChatRoomScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
+      <Pressable onPress={()  => navigation?.goBack()} style={styles?.backIcon} >
+      <BlackArrowBack_Icon height={width / 12} width={width/12} />
+      </Pressable>
+
         <Text style={styles.groupName}>{roomDetails.name}</Text>
         {/* <Text style={styles.memberCount}>{roomDetails.members?.length || 0} members</Text> */}
       </View>
@@ -95,7 +105,10 @@ const ChatRoomScreen = ({ route }) => {
           onChangeText={setMessage}
           placeholder="Type a message"
         />
-        <Button title="Send" onPress={sendMessage} />
+        {/* <Button title="Send"  /> */}
+        <Pressable onPress={sendMessage} style={styles?.buttonContainer}>
+<Text style={styles?.buttonText} >Send</Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -111,7 +124,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     alignItems: 'center',
+    flexDirection:  'row',
+    justifyContent: 'center'
   },
+  buttonContainer: {
+		marginVertical: 10,
+		// width: '100%',
+		height: height / 16,
+		backgroundColor: colors.primaryColor,
+		padding: 10,
+		alignItems: 'center',
+		justifyContent: 'center',
+		borderRadius: 10,
+	},
+	buttonText: {
+		fontFamily: fonts.PoppinsMedium,
+		width: '100%',
+		textAlign: 'center',
+		fontSize: 16,
+		color: colors.white,
+	},
   groupName: {
     fontSize: 18,
     fontWeight: 'bold',
@@ -131,11 +163,11 @@ const styles = StyleSheet.create({
   },
   messageLeft: {
     alignSelf: 'flex-start',
-    backgroundColor: '#e1ffc7',
-  },
-  messageRight: {
-    alignSelf: 'flex-end',
     backgroundColor: '#dcf8c6',
+},
+messageRight: {
+    alignSelf: 'flex-end',
+    backgroundColor: colors?.pastelOne,
   },
   userName: {
     fontWeight: 'bold',
@@ -160,6 +192,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
     marginRight: 10,
+  },
+  backIcon: {
+  position: 'absolute',
+  left: width /30,
   },
 });
 

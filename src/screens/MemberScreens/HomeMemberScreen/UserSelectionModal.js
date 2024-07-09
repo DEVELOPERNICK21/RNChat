@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import CustomButton from '../../../component/CustomButton';
+import { colors } from '../../../res/color';
+import { height, width } from '../../../res/string';
 
 const UserSelectionModal = ({ onClose }) => {
   const [users, setUsers] = useState([]);
@@ -79,14 +82,18 @@ const UserSelectionModal = ({ onClose }) => {
           </TouchableOpacity>
         )}
       />
-      <Button title="Create Chat Room" onPress={createChatRoom} />
-      <Button title="Close" onPress={onClose} />
+      {/* <Button title="Create Chat Room" onPress={createChatRoom} /> */}
+      <CustomButton buttonTitle={'Create'} onPress={() => (createChatRoom())} />
+      <CustomButton buttonTitle={'Close'} onPress={() => (onClose())} />
+
+      {/* <Button title="Close" onPress={onClose} /> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   modalView: {
+    height: height / 1.2,
     margin: 20,
     padding: 35,
     backgroundColor: 'white',
@@ -108,15 +115,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     width: '100%',
     paddingHorizontal: 10,
+    borderRadius: 10,
   },
   userItem: {
     padding: 10,
     marginVertical: 5,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: colors?.pastelOne,
     borderRadius: 5,
+    width: width /1.5,
+    color: colors?.white
   },
   selectedUserItem: {
+    width: width /1.5,
     backgroundColor: '#d3d3d3',
+    color: colors?.white
+
   },
 });
 
